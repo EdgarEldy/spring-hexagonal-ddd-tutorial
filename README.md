@@ -371,16 +371,16 @@ No external dependency beyond the JDK. No Spring, JPA, or Bean Validation annota
 
 ### Tasks
 
-- [ ] `Money` (Value Object): `amount`/`currency` fields, immutable, validation in the constructor (amount ≥ 0), `add`, `multiply` methods
-- [ ] `Email` (Value Object): format validation in the constructor
-- [ ] `Category`, `Product` (with `unitPrice: Money`), `Customer` (with `email: Email`)
-- [ ] `OrderLine` (product + quantity + computed subtotal)
-- [ ] `Order` (Aggregate Root): collection of `OrderLine`, a `place()` method that validates invariants (order not empty) and raises `OrderPlacedEvent`, `total` recomputed internally, never assignable from the outside
-- [ ] `OrderStatus` (enum), `DomainEvent`/`OrderPlacedEvent`
-- [ ] Business exceptions (`EmptyOrderException`, `InsufficientStockException`)
-- [ ] `port/in` interfaces (Evans' Repository pattern extended to every port): one use case per business action (`CreateOrderUseCase`, `GetOrderUseCase`, `ListOrdersUseCase`, `CreateProductUseCase`, etc.), each with a single method and a `Command`/`Query` input (record) in `port/in/command/`
-- [ ] `port/out` interfaces: `OrderRepositoryPort`, `ProductRepositoryPort`, `CustomerRepositoryPort`, `CategoryRepositoryPort`, `DomainEventPublisherPort` - operating only on domain objects, never on DTOs or JPA entities
-- [ ] Pure unit tests (JUnit 5 only, no Spring context) on the aggregate's invariants and the Value Objects
+- [x] `Money` (Value Object): `amount`/`currency` fields, immutable, validation in the constructor (amount ≥ 0), `add`, `multiply` methods
+- [x] `Email` (Value Object): format validation in the constructor
+- [x] `Category`, `Product` (with `unitPrice: Money`), `Customer` (with `email: Email`)
+- [x] `OrderLine` (product + quantity + computed subtotal)
+- [x] `Order` (Aggregate Root): collection of `OrderLine`, a `place()` method that validates invariants (order not empty) and raises `OrderPlacedEvent`, `total` recomputed internally, never assignable from the outside
+- [x] `OrderStatus` (enum), `DomainEvent`/`OrderPlacedEvent`
+- [x] Business exceptions (`EmptyOrderException`, `InsufficientStockException`)
+- [x] `port/in` interfaces (Evans' Repository pattern extended to every port): one use case per business action (`CreateOrderUseCase`, `GetOrderUseCase`, `ListOrdersUseCase`, `CreateProductUseCase`, etc.), each with a single method and a `Command`/`Query` input (record) in `port/in/command/`
+- [x] `port/out` interfaces: `OrderRepositoryPort`, `ProductRepositoryPort`, `CustomerRepositoryPort`, `CategoryRepositoryPort`, `DomainEventPublisherPort` - operating only on domain objects, never on DTOs or JPA entities
+- [x] Pure unit tests (JUnit 5 only, no Spring context) on the aggregate's invariants and the Value Objects
 
 ## feature/application
 
