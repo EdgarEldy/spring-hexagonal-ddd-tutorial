@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.edgareldy</groupId>
+		<artifactId>spring-hexagonal-ddd-tutorial</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>infrastructure</artifactId>
+	<packaging>jar</packaging>
+	<name>infrastructure</name>
+	<description>Infrastructure layer: REST and JPA adapters implementing domain's outbound ports and calling its inbound ports. Framework-specific dependencies (Spring Web, Spring Data JPA, MapStruct, springdoc) are added when feature/infrastructure starts.</description>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.edgareldy</groupId>
+			<artifactId>application</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.edgareldy</groupId>
+			<artifactId>domain</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.assertj</groupId>
+			<artifactId>assertj-core</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+</project>
