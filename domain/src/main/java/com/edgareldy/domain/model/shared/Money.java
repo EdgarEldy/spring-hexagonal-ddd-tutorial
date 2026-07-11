@@ -45,4 +45,26 @@ public record Money(BigDecimal amount, Currency currency) {
                     "cannot combine amounts in different currencies: " + this.currency + " and " + other.currency);
         }
     }
+
+    /**
+     * Overridden rather than left to the record default: {@link BigDecimal#equals} is
+     * scale-sensitive ({@code 9.9} and {@code 9.90} compare unequal), which would let two
+     * economically identical amounts (e.g. after a {@code multiply()} changes the scale) be
+     * treated as different. Equality here follows {@link BigDecimal#compareTo} instead.
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Money other)) {
+            return false;
+        }
+        return amount.compareTo(other.amount) == 0 && currency.equals(other.currency);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(amount.stripTrailingZeros(), currency);
+    }
 }

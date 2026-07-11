@@ -68,4 +68,21 @@ class MoneyTest {
 
         assertThatThrownBy(() -> unitPrice.multiply(-1)).isInstanceOf(IllegalArgumentException.class);
     }
+
+    @Test
+    void zero_returns_a_zero_amount_in_the_given_currency() {
+        Money zero = Money.zero(EUR);
+
+        assertThat(zero.amount()).isEqualByComparingTo(BigDecimal.ZERO);
+        assertThat(zero.currency()).isEqualTo(EUR);
+    }
+
+    @Test
+    void two_amounts_with_different_scale_but_the_same_value_are_equal() {
+        Money first = new Money(new BigDecimal("9.90"), EUR);
+        Money second = new Money(new BigDecimal("9.9"), EUR);
+
+        assertThat(first).isEqualTo(second);
+        assertThat(first.hashCode()).isEqualTo(second.hashCode());
+    }
 }
