@@ -388,8 +388,8 @@ Depends only on `domain`. Declares no port of its own - only implements `domain`
 
 ### Tasks
 
-- [ ] Implementations in `service/`, one per `domain.port.in` use case (e.g. `CreateOrderService implements CreateOrderUseCase`): orchestrate the domain (load/create the aggregate, call its business methods) and call the domain's outbound ports (persistence, event publishing) - **no business rule lives here**, orchestration only
-- [ ] Tests with Mockito on the outbound ports (no Spring, no database)
+- [x] Implementations in `service/`, one per `domain.port.in` use case (e.g. `CreateOrderService implements CreateOrderUseCase`): orchestrate the domain (load/create the aggregate, call its business methods) and call the domain's outbound ports (persistence, event publishing) - **no business rule lives here**, orchestration only
+- [x] Tests with Mockito on the outbound ports (no Spring, no database)
 
 ## feature/infrastructure
 
