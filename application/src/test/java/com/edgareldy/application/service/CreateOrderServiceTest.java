@@ -17,6 +17,7 @@ import com.edgareldy.domain.port.out.OrderRepositoryPort;
 import com.edgareldy.domain.port.out.ProductRepositoryPort;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
@@ -67,12 +68,14 @@ class CreateOrderServiceTest {
         when(customerRepositoryPort.findById(7L)).thenReturn(Optional.of(customer));
         Product product = Product.reconstitute(1L, 1L, "Mechanical keyboard", UNIT_PRICE);
         when(productRepositoryPort.findById(1L)).thenReturn(Optional.of(product));
+        // Every save() reconstructs a brand new Order instance, exactly like a real adapter
+        // round-tripping through a JPA entity would: this only passes if createOrder() captures
+        // the domain event before the second save(), not by reading it off whatever the second
+        // save() happens to return.
         when(orderRepositoryPort.save(any(Order.class))).thenAnswer(invocation -> {
             Order input = invocation.getArgument(0);
-            if (input.getId() != null) {
-                return input;
-            }
-            return Order.reconstitute(99L, input.getCustomerId(), input.getLines(), input.getStatus(),
+            Long id = input.getId() != null ? input.getId() : 99L;
+            return Order.reconstitute(id, input.getCustomerId(), input.getLines(), input.getStatus(),
                     input.getPlacedAt());
         });
         CreateOrderService service = new CreateOrderService(orderRepositoryPort, productRepositoryPort,
@@ -84,7 +87,12 @@ class CreateOrderServiceTest {
         assertThat(result.getId()).isEqualTo(99L);
         assertThat(result.getStatus()).isEqualTo(OrderStatus.PLACED);
         verify(orderRepositoryPort, times(2)).save(any(Order.class));
-        verify(domainEventPublisherPort).publish(any(OrderPlacedEvent.class));
+        ArgumentCaptor<OrderPlacedEvent> eventCaptor = ArgumentCaptor.forClass(OrderPlacedEvent.class);
+        verify(domainEventPublisherPort).publish(eventCaptor.capture());
+        OrderPlacedEvent event = eventCaptor.getValue();
+        assertThat(event.orderId()).isEqualTo(99L);
+        assertThat(event.customerId()).isEqualTo(7L);
+        assertThat(event.total().amount()).isEqualByComparingTo(BigDecimal.valueOf(19.98));
     }
 
     @Test

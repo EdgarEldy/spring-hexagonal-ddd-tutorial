@@ -1,5 +1,6 @@
 package com.edgareldy.application.service;
 
+import com.edgareldy.domain.event.DomainEvent;
 import com.edgareldy.domain.exception.CustomerNotFoundException;
 import com.edgareldy.domain.exception.ProductNotFoundException;
 import com.edgareldy.domain.model.customer.Customer;
@@ -50,6 +51,12 @@ public final class CreateOrderService implements CreateOrderUseCase {
      * Saves the order twice on purpose: {@code Order.place()} requires an id, which only exists
      * once the database-generated primary key has been assigned by a first {@code save()}. The
      * second {@code save()} persists the resulting {@code PLACED} status and {@code placedAt}.
+     * <p>
+     * Domain events are drained right after {@code place()}, before that second {@code save()},
+     * not after it: {@code OrderRepositoryPort.save} makes no promise about returning the same
+     * object instance it was given, and a real adapter reconstructing the aggregate from the
+     * persisted row would hand back a fresh {@code Order} with an empty event list, silently
+     * dropping {@code OrderPlacedEvent} if it were read from that return value instead.
      */
     @Override
     public Order createOrder(CreateOrderCommand command) {
@@ -61,9 +68,10 @@ public final class CreateOrderService implements CreateOrderUseCase {
         Order order = Order.create(customer.getId(), lines);
         order = orderRepositoryPort.save(order);
         order.place();
+        List<DomainEvent> events = order.pullDomainEvents();
         order = orderRepositoryPort.save(order);
 
-        order.pullDomainEvents().forEach(domainEventPublisherPort::publish);
+        events.forEach(domainEventPublisherPort::publish);
 
         return order;
     }
