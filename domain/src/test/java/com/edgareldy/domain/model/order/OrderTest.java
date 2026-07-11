@@ -28,6 +28,11 @@ class OrderTest {
     private static final Currency EUR = Currency.getInstance("EUR");
 
     @Test
+    void cannot_be_created_without_at_least_one_line() {
+        assertThatThrownBy(() -> Order.create(1L, List.of())).isInstanceOf(EmptyOrderException.class);
+    }
+
+    @Test
     void cannot_be_placed_without_at_least_one_line() {
         Order order = Order.reconstitute(99L, 1L, List.of(), OrderStatus.DRAFT, null);
 

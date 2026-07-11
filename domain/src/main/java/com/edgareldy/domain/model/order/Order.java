@@ -27,7 +27,7 @@ public final class Order {
     private final List<OrderLine> lines;
     private OrderStatus status;
     private Instant placedAt;
-    private final transient List<DomainEvent> domainEvents = new ArrayList<>();
+    private final List<DomainEvent> domainEvents = new ArrayList<>();
 
     private Order(Long id, Long customerId, List<OrderLine> lines, OrderStatus status, Instant placedAt) {
         this.id = id;
@@ -40,6 +40,9 @@ public final class Order {
     public static Order create(Long customerId, List<OrderLine> lines) {
         Objects.requireNonNull(customerId, "customerId must not be null");
         Objects.requireNonNull(lines, "lines must not be null");
+        if (lines.isEmpty()) {
+            throw new EmptyOrderException();
+        }
         return new Order(null, customerId, lines, OrderStatus.DRAFT, null);
     }
 
@@ -82,6 +85,12 @@ public final class Order {
         return events;
     }
 
+    /**
+     * Recomputes the total from the current lines. Returns {@code null} only for a
+     * {@code reconstitute()}-loaded order with no lines at all, an anomaly {@code create()}
+     * itself never allows: every order built through the normal creation path is guaranteed
+     * to have at least one line, hence a non-null total.
+     */
     public Money getTotal() {
         Money total = null;
         for (OrderLine line : lines) {
