@@ -441,12 +441,12 @@ Depends on every module, `test` scope only. Contains no production code.
 
 ### Tasks
 
-- [ ] `com.tngtech.archunit:archunit-junit5` dependency
-- [ ] `DomainIndependenceTest`: verifies `com.edgareldy.domain..` does not depend on any class from `application`, `infrastructure`, `bootstrap`, nor on `org.springframework..`/`jakarta.persistence..` packages
-- [ ] `ApplicationDependencyTest`: verifies `application..` never depends on `infrastructure..`, and never declares its own `port.in`/`port.out` package (ports live in `domain` only)
-- [ ] `LayeredArchitectureTest`: global rule via `ArchRuleDefinition.layeredArchitecture()` declaring the 4 layers (domain, application, infrastructure, bootstrap) and the allowed access between them
-- [ ] `NamingConventionTest`: interfaces in `domain.port.in` end in `UseCase`, those in `domain.port.out` end in `Port`, adapters in `infrastructure.out` end in `Adapter`
-- [ ] These tests run in CI on every Pull Request: any architectural violation fails the build, independently of functional tests
+- [x] `com.tngtech.archunit:archunit-junit5` dependency
+- [x] `DomainIndependenceTest`: verifies `com.edgareldy.domain..` does not depend on any class from `application`, `infrastructure`, `bootstrap`, nor on `org.springframework..`/`jakarta.persistence..` packages
+- [x] `ApplicationDependencyTest`: verifies `application..` never depends on `infrastructure..`, and never declares its own `port.in`/`port.out` package (ports live in `domain` only)
+- [x] `LayeredArchitectureTest`: global rule via `ArchRuleDefinition.layeredArchitecture()` declaring the 4 layers (domain, application, infrastructure, bootstrap) and the allowed access between them
+- [x] `NamingConventionTest`: interfaces in `domain.port.in` end in `UseCase`, those in `domain.port.out` end in `Port`, adapters in `infrastructure.out` end in `Adapter`
+- [ ] These tests run in CI on every Pull Request: any architectural violation fails the build, independently of functional tests (the GitHub Actions workflow itself is a `feature/bootstrap` task, not yet written)
 
 ## Order of work
 
