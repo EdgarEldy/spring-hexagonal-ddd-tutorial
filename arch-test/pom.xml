@@ -33,7 +33,6 @@
 		<dependency>
 			<groupId>com.edgareldy</groupId>
 			<artifactId>bootstrap</artifactId>
-			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>

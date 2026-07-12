@@ -51,6 +51,11 @@
 				<artifactId>infrastructure</artifactId>
 				<version>${project.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>com.edgareldy</groupId>
+				<artifactId>bootstrap</artifactId>
+				<version>${project.version}</version>
+			</dependency>
 			<!-- Shared versions across modules that need them (infrastructure, arch-test) -->
 			<dependency>
 				<groupId>org.springdoc</groupId>
