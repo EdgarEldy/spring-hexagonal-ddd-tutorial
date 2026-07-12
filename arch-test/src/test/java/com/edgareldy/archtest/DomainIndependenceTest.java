@@ -24,18 +24,15 @@ class DomainIndependenceTest {
             .that().resideInAPackage("com.edgareldy.domain..")
             .should().dependOnClassesThat()
             .resideInAnyPackage("com.edgareldy.application..", "com.edgareldy.infrastructure..",
-                    "com.edgareldy.bootstrap..")
-            .allowEmptyShould(true);
+                    "com.edgareldy.bootstrap..");
 
     @ArchTest
     static final ArchRule domain_does_not_depend_on_spring = noClasses()
             .that().resideInAPackage("com.edgareldy.domain..")
-            .should().dependOnClassesThat().resideInAnyPackage("org.springframework..")
-            .allowEmptyShould(true);
+            .should().dependOnClassesThat().resideInAnyPackage("org.springframework..");
 
     @ArchTest
     static final ArchRule domain_does_not_depend_on_jpa = noClasses()
             .that().resideInAPackage("com.edgareldy.domain..")
-            .should().dependOnClassesThat().resideInAnyPackage("jakarta.persistence..")
-            .allowEmptyShould(true);
+            .should().dependOnClassesThat().resideInAnyPackage("jakarta.persistence..");
 }
