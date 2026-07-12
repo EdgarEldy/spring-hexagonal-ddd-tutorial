@@ -96,6 +96,19 @@ class OrderControllerTest {
     }
 
     @Test
+    void returns_400_for_a_non_numeric_id() throws Exception {
+        mockMvc.perform(get("/api/v1/orders/not-a-number")).andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void returns_500_for_an_unexpected_failure() throws Exception {
+        when(getOrderUseCase.getOrder(1L)).thenThrow(new RuntimeException("boom"));
+
+        mockMvc.perform(get("/api/v1/orders/1")).andExpect(status().isInternalServerError())
+                .andExpect(jsonPath("$.message").value("an unexpected error occurred"));
+    }
+
+    @Test
     void lists_orders() throws Exception {
         Order order = Order.reconstitute(1L, 7L, List.of(lineOf(9.99, 2)), OrderStatus.PLACED, Instant.now());
         PageResult<Order> page = new PageResult<>(List.of(order), 0, 20, 1, 1);
