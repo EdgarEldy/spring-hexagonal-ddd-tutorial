@@ -411,15 +411,15 @@ Depends on `application` and `domain`.
 
 ### Tasks
 
-- [ ] JPA entities (`*Entity`), distinct from domain objects, with `jakarta.persistence.*` annotations
-- [ ] Spring Data JPA repositories on the `*Entity` classes
-- [ ] Persistence mappers (domain ↔ JPA entity)
-- [ ] Adapters (`*RepositoryAdapter`) implementing `application`'s outbound ports, using the JPA repositories + mappers
-- [ ] `SpringDomainEventPublisherAdapter` implementing `DomainEventPublisherPort` via `ApplicationEventPublisher`
-- [ ] REST controllers (`/api/v1/...`): inject **use cases** (`port/in`), never repositories or adapters directly
-- [ ] Request/Response DTOs, DTO ↔ Command/domain mappers, generic `ApiResponse<T>`
-- [ ] `GlobalExceptionHandler`: translates every `DomainException` into the appropriate HTTP status (e.g. `EmptyOrderException` → 422)
-- [ ] `@WebMvcTest` tests (controllers, use cases mocked) and `@DataJpaTest` tests (persistence adapters)
+- [x] JPA entities (`*Entity`), distinct from domain objects, with `jakarta.persistence.*` annotations
+- [x] Spring Data JPA repositories on the `*Entity` classes
+- [x] Persistence mappers (domain ↔ JPA entity)
+- [x] Adapters (`*RepositoryAdapter`) implementing `domain`'s outbound ports, using the JPA repositories + mappers
+- [x] `SpringDomainEventPublisherAdapter` implementing `DomainEventPublisherPort` via `ApplicationEventPublisher`
+- [x] REST controllers (`/api/v1/...`): inject **use cases** (`port/in`), never repositories or adapters directly
+- [x] Request/Response DTOs, DTO ↔ Command/domain mappers, generic `ApiResponse<T>`
+- [x] `GlobalExceptionHandler`: translates every `DomainException` into the appropriate HTTP status (e.g. `EmptyOrderException` → 422)
+- [x] `@WebMvcTest` tests (controllers, use cases mocked) and `@DataJpaTest` tests (persistence adapters)
 
 ## feature/bootstrap
 
