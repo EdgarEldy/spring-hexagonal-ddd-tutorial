@@ -20,9 +20,9 @@ import static com.tngtech.archunit.library.Architectures.layeredArchitecture;
 @AnalyzeClasses(packages = "com.edgareldy")
 class LayeredArchitectureTest {
 
-    // withOptionalLayers(true): infrastructure has no classes yet as of feature/arch-test, and
-    // layeredArchitecture() otherwise fails on an empty layer, which would make this rule
-    // impossible to add before feature/infrastructure exists.
+    // withOptionalLayers(true): layeredArchitecture() fails outright if any declared layer has
+    // no classes at all, and bootstrap is still only its initial Spring Boot skeleton as of
+    // feature/infrastructure. Harmless to keep once every layer is fully populated.
     @ArchTest
     static final ArchRule layer_dependencies_are_respected = layeredArchitecture()
             .consideringAllDependencies()

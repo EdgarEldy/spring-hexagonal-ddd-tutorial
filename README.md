@@ -95,7 +95,7 @@ products (id, category_id, product_name, unit_price_amount, unit_price_currency)
     │ 1
     │
     │ N
-order_lines (id, order_id, product_id, quantity, unit_price_amount, unit_price_currency)
+order_lines (id, order_id, product_id, product_name, quantity, unit_price_amount, unit_price_currency)
     │ N
     │
     │ 1
@@ -149,6 +149,7 @@ customers (id, first_name, last_name, telephone, email, address)
 | id | BIGINT | PK, auto-increment |
 | order_id | BIGINT | FK -> orders.id, NOT NULL |
 | product_id | BIGINT | FK -> products.id, NOT NULL |
+| product_name | VARCHAR(255) | NOT NULL, snapshotted at line creation time, not re-read from `products` later |
 | quantity | INT | NOT NULL, > 0 |
 | unit_price_amount | NUMERIC(19,2) | NOT NULL, `Money` captured at line creation time, not re-read from `products` later |
 | unit_price_currency | VARCHAR(3) | NOT NULL |
@@ -411,15 +412,15 @@ Depends on `application` and `domain`.
 
 ### Tasks
 
-- [ ] JPA entities (`*Entity`), distinct from domain objects, with `jakarta.persistence.*` annotations
-- [ ] Spring Data JPA repositories on the `*Entity` classes
-- [ ] Persistence mappers (domain ↔ JPA entity)
-- [ ] Adapters (`*RepositoryAdapter`) implementing `application`'s outbound ports, using the JPA repositories + mappers
-- [ ] `SpringDomainEventPublisherAdapter` implementing `DomainEventPublisherPort` via `ApplicationEventPublisher`
-- [ ] REST controllers (`/api/v1/...`): inject **use cases** (`port/in`), never repositories or adapters directly
-- [ ] Request/Response DTOs, DTO ↔ Command/domain mappers, generic `ApiResponse<T>`
-- [ ] `GlobalExceptionHandler`: translates every `DomainException` into the appropriate HTTP status (e.g. `EmptyOrderException` → 422)
-- [ ] `@WebMvcTest` tests (controllers, use cases mocked) and `@DataJpaTest` tests (persistence adapters)
+- [x] JPA entities (`*Entity`), distinct from domain objects, with `jakarta.persistence.*` annotations
+- [x] Spring Data JPA repositories on the `*Entity` classes
+- [x] Persistence mappers (domain ↔ JPA entity)
+- [x] Adapters (`*RepositoryAdapter`) implementing `domain`'s outbound ports, using the JPA repositories + mappers
+- [x] `SpringDomainEventPublisherAdapter` implementing `DomainEventPublisherPort` via `ApplicationEventPublisher`
+- [x] REST controllers (`/api/v1/...`): inject **use cases** (`port/in`), never repositories or adapters directly
+- [x] Request/Response DTOs, DTO ↔ Command/domain mappers, generic `ApiResponse<T>`
+- [x] `GlobalExceptionHandler`: translates every `DomainException` into the appropriate HTTP status (e.g. `EmptyOrderException` → 422)
+- [x] `@WebMvcTest` tests (controllers, use cases mocked) and `@DataJpaTest` tests (persistence adapters)
 
 ## feature/bootstrap
 
