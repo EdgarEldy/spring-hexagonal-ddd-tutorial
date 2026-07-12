@@ -72,7 +72,7 @@ class OrderRepositoryAdapterTest {
     }
 
     @Test
-    void updating_status_after_place_does_not_touch_the_lines() {
+    void updating_status_after_place_does_not_touch_the_lines_or_the_total() {
         Order saved = adapter.save(Order.create(1L, List.of(lineOf(9.99, 2))));
         saved.place();
 
@@ -80,9 +80,11 @@ class OrderRepositoryAdapterTest {
 
         assertThat(updated.getStatus()).isEqualTo(OrderStatus.PLACED);
         assertThat(updated.getLines()).hasSize(1);
+        assertThat(updated.getTotal()).isEqualTo(saved.getTotal());
         Optional<Order> reloaded = adapter.findById(saved.getId());
         assertThat(reloaded).isPresent();
         assertThat(reloaded.get().getLines()).hasSize(1);
+        assertThat(reloaded.get().getTotal()).isEqualTo(saved.getTotal());
     }
 
     @Test
