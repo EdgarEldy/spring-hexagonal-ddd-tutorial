@@ -75,4 +75,16 @@ class CustomerControllerTest {
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.success").value(false));
     }
+
+    @Test
+    void translates_a_malformed_email_into_400() throws Exception {
+        when(createCustomerUseCase.createCustomer(any())).thenThrow(
+                new IllegalArgumentException("invalid email format: not-an-email"));
+
+        mockMvc.perform(post("/api/v1/customers").contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"firstName\": \"Jane\", \"lastName\": \"Doe\", \"telephone\": \"0102030405\", "
+                                + "\"email\": \"not-an-email\", \"address\": \"1 rue de Paris\"}"))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.success").value(false));
+    }
 }
