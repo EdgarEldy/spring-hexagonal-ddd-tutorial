@@ -21,6 +21,9 @@ services:
       db:
         condition: service_healthy
     environment:
+      # These override application-dev.yml's localhost datasource: environment variables
+      # outrank profile YAML in Spring's property source order, and inside this network the
+      # database is reachable at the "db" service name, not localhost.
       SPRING_PROFILES_ACTIVE: dev
       SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/hexagonal_ddd_tutorial
       SPRING_DATASOURCE_USERNAME: postgres
