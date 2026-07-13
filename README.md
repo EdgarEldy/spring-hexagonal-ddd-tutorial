@@ -95,7 +95,7 @@ products (id, category_id, product_name, unit_price_amount, unit_price_currency)
     │ 1
     │
     │ N
-order_lines (id, order_id, product_id, quantity, unit_price_amount, unit_price_currency)
+order_lines (id, order_id, product_id, product_name, quantity, unit_price_amount, unit_price_currency)
     │ N
     │
     │ 1
@@ -149,6 +149,7 @@ customers (id, first_name, last_name, telephone, email, address)
 | id | BIGINT | PK, auto-increment |
 | order_id | BIGINT | FK -> orders.id, NOT NULL |
 | product_id | BIGINT | FK -> products.id, NOT NULL |
+| product_name | VARCHAR(255) | NOT NULL, snapshotted at line creation time, not re-read from `products` later |
 | quantity | INT | NOT NULL, > 0 |
 | unit_price_amount | NUMERIC(19,2) | NOT NULL, `Money` captured at line creation time, not re-read from `products` later |
 | unit_price_currency | VARCHAR(3) | NOT NULL |
@@ -371,16 +372,16 @@ No external dependency beyond the JDK. No Spring, JPA, or Bean Validation annota
 
 ### Tasks
 
-- [ ] `Money` (Value Object): `amount`/`currency` fields, immutable, validation in the constructor (amount ≥ 0), `add`, `multiply` methods
-- [ ] `Email` (Value Object): format validation in the constructor
-- [ ] `Category`, `Product` (with `unitPrice: Money`), `Customer` (with `email: Email`)
-- [ ] `OrderLine` (product + quantity + computed subtotal)
-- [ ] `Order` (Aggregate Root): collection of `OrderLine`, a `place()` method that validates invariants (order not empty) and raises `OrderPlacedEvent`, `total` recomputed internally, never assignable from the outside
-- [ ] `OrderStatus` (enum), `DomainEvent`/`OrderPlacedEvent`
-- [ ] Business exceptions (`EmptyOrderException`, `InsufficientStockException`)
-- [ ] `port/in` interfaces (Evans' Repository pattern extended to every port): one use case per business action (`CreateOrderUseCase`, `GetOrderUseCase`, `ListOrdersUseCase`, `CreateProductUseCase`, etc.), each with a single method and a `Command`/`Query` input (record) in `port/in/command/`
-- [ ] `port/out` interfaces: `OrderRepositoryPort`, `ProductRepositoryPort`, `CustomerRepositoryPort`, `CategoryRepositoryPort`, `DomainEventPublisherPort` - operating only on domain objects, never on DTOs or JPA entities
-- [ ] Pure unit tests (JUnit 5 only, no Spring context) on the aggregate's invariants and the Value Objects
+- [x] `Money` (Value Object): `amount`/`currency` fields, immutable, validation in the constructor (amount ≥ 0), `add`, `multiply` methods
+- [x] `Email` (Value Object): format validation in the constructor
+- [x] `Category`, `Product` (with `unitPrice: Money`), `Customer` (with `email: Email`)
+- [x] `OrderLine` (product + quantity + computed subtotal)
+- [x] `Order` (Aggregate Root): collection of `OrderLine`, a `place()` method that validates invariants (order not empty) and raises `OrderPlacedEvent`, `total` recomputed internally, never assignable from the outside
+- [x] `OrderStatus` (enum), `DomainEvent`/`OrderPlacedEvent`
+- [x] Business exceptions (`EmptyOrderException`, `InsufficientStockException`)
+- [x] `port/in` interfaces (Evans' Repository pattern extended to every port): one use case per business action (`CreateOrderUseCase`, `GetOrderUseCase`, `ListOrdersUseCase`, `CreateProductUseCase`, etc.), each with a single method and a `Command`/`Query` input (record) in `port/in/command/`
+- [x] `port/out` interfaces: `OrderRepositoryPort`, `ProductRepositoryPort`, `CustomerRepositoryPort`, `CategoryRepositoryPort`, `DomainEventPublisherPort` - operating only on domain objects, never on DTOs or JPA entities
+- [x] Pure unit tests (JUnit 5 only, no Spring context) on the aggregate's invariants and the Value Objects
 
 ## feature/application
 
@@ -388,8 +389,8 @@ Depends only on `domain`. Declares no port of its own - only implements `domain`
 
 ### Tasks
 
-- [ ] Implementations in `service/`, one per `domain.port.in` use case (e.g. `CreateOrderService implements CreateOrderUseCase`): orchestrate the domain (load/create the aggregate, call its business methods) and call the domain's outbound ports (persistence, event publishing) - **no business rule lives here**, orchestration only
-- [ ] Tests with Mockito on the outbound ports (no Spring, no database)
+- [x] Implementations in `service/`, one per `domain.port.in` use case (e.g. `CreateOrderService implements CreateOrderUseCase`): orchestrate the domain (load/create the aggregate, call its business methods) and call the domain's outbound ports (persistence, event publishing) - **no business rule lives here**, orchestration only
+- [x] Tests with Mockito on the outbound ports (no Spring, no database)
 
 ## feature/infrastructure
 
@@ -411,15 +412,15 @@ Depends on `application` and `domain`.
 
 ### Tasks
 
-- [ ] JPA entities (`*Entity`), distinct from domain objects, with `jakarta.persistence.*` annotations
-- [ ] Spring Data JPA repositories on the `*Entity` classes
-- [ ] Persistence mappers (domain ↔ JPA entity)
-- [ ] Adapters (`*RepositoryAdapter`) implementing `application`'s outbound ports, using the JPA repositories + mappers
-- [ ] `SpringDomainEventPublisherAdapter` implementing `DomainEventPublisherPort` via `ApplicationEventPublisher`
-- [ ] REST controllers (`/api/v1/...`): inject **use cases** (`port/in`), never repositories or adapters directly
-- [ ] Request/Response DTOs, DTO ↔ Command/domain mappers, generic `ApiResponse<T>`
-- [ ] `GlobalExceptionHandler`: translates every `DomainException` into the appropriate HTTP status (e.g. `EmptyOrderException` → 422)
-- [ ] `@WebMvcTest` tests (controllers, use cases mocked) and `@DataJpaTest` tests (persistence adapters)
+- [x] JPA entities (`*Entity`), distinct from domain objects, with `jakarta.persistence.*` annotations
+- [x] Spring Data JPA repositories on the `*Entity` classes
+- [x] Persistence mappers (domain ↔ JPA entity)
+- [x] Adapters (`*RepositoryAdapter`) implementing `domain`'s outbound ports, using the JPA repositories + mappers
+- [x] `SpringDomainEventPublisherAdapter` implementing `DomainEventPublisherPort` via `ApplicationEventPublisher`
+- [x] REST controllers (`/api/v1/...`): inject **use cases** (`port/in`), never repositories or adapters directly
+- [x] Request/Response DTOs, DTO ↔ Command/domain mappers, generic `ApiResponse<T>`
+- [x] `GlobalExceptionHandler`: translates every `DomainException` into the appropriate HTTP status (e.g. `EmptyOrderException` → 422)
+- [x] `@WebMvcTest` tests (controllers, use cases mocked) and `@DataJpaTest` tests (persistence adapters)
 
 ## feature/bootstrap
 
@@ -427,13 +428,13 @@ Depends on `application` and `infrastructure`. The only module packaged as an ex
 
 ### Tasks
 
-- [ ] `HexagonalDddTutorialApplication` (`@SpringBootApplication`), with `scanBasePackages`/`@EntityScan`/`@EnableJpaRepositories` explicitly pointing at the `infrastructure` packages (the beans do not live in the same module as the main class)
-- [ ] `application.yml`/`application-dev.yml`/`application-test.yml`: datasource, ports, Actuator configuration
-- [ ] Flyway script `V1__init_schema.sql` (schema including the `order_lines` table)
-- [ ] `OpenApiConfig`
-- [ ] `docker-compose.yml` + `Dockerfile`
-- [ ] `.github/workflows/ci.yml`: multi-module build (`mvn -T 1C clean verify`)
-- [ ] End-to-end integration test (`@SpringBootTest`, Testcontainers) verifying the full chain controller → use case → domain → adapter → database
+- [x] `HexagonalDddTutorialApplication` (`@SpringBootApplication`), with `scanBasePackages`/`@EntityScan`/`@EnableJpaRepositories` explicitly pointing at the `infrastructure` packages (the beans do not live in the same module as the main class)
+- [x] `application.yml`/`application-dev.yml`/`application-test.yml`: datasource, ports, Actuator configuration
+- [x] Flyway script `V1__init_schema.sql` (schema including the `order_lines` table)
+- [x] `OpenApiConfig`
+- [x] `docker-compose.yml` + `Dockerfile`
+- [x] `.github/workflows/ci.yml`: multi-module build (`mvn -T 1C clean verify`)
+- [x] End-to-end integration test (`@SpringBootTest`, Testcontainers) verifying the full chain controller → use case → domain → adapter → database
 
 ## feature/arch-test
 
@@ -441,12 +442,12 @@ Depends on every module, `test` scope only. Contains no production code.
 
 ### Tasks
 
-- [ ] `com.tngtech.archunit:archunit-junit5` dependency
-- [ ] `DomainIndependenceTest`: verifies `com.edgareldy.domain..` does not depend on any class from `application`, `infrastructure`, `bootstrap`, nor on `org.springframework..`/`jakarta.persistence..` packages
-- [ ] `ApplicationDependencyTest`: verifies `application..` never depends on `infrastructure..`, and never declares its own `port.in`/`port.out` package (ports live in `domain` only)
-- [ ] `LayeredArchitectureTest`: global rule via `ArchRuleDefinition.layeredArchitecture()` declaring the 4 layers (domain, application, infrastructure, bootstrap) and the allowed access between them
-- [ ] `NamingConventionTest`: interfaces in `domain.port.in` end in `UseCase`, those in `domain.port.out` end in `Port`, adapters in `infrastructure.out` end in `Adapter`
-- [ ] These tests run in CI on every Pull Request: any architectural violation fails the build, independently of functional tests
+- [x] `com.tngtech.archunit:archunit-junit5` dependency
+- [x] `DomainIndependenceTest`: verifies `com.edgareldy.domain..` does not depend on any class from `application`, `infrastructure`, `bootstrap`, nor on `org.springframework..`/`jakarta.persistence..` packages
+- [x] `ApplicationDependencyTest`: verifies `application..` never depends on `infrastructure..`, and never declares its own `port.in`/`port.out` package (ports live in `domain` only)
+- [x] `LayeredArchitectureTest`: global rule via `ArchRuleDefinition.layeredArchitecture()` declaring the 4 layers (domain, application, infrastructure, bootstrap) and the allowed access between them
+- [x] `NamingConventionTest`: interfaces in `domain.port.in` end in `UseCase`, those in `domain.port.out` end in `Port`, adapters in `infrastructure.out` end in `Adapter`
+- [x] These tests run in CI on every Pull Request: any architectural violation fails the build, independently of functional tests (`.github/workflows/ci.yml`, added in `feature/bootstrap`)
 
 ## Order of work
 
@@ -480,6 +481,12 @@ Depends on every module, `test` scope only. Contains no production code.
 - Generic `ApiResponse<T>` DTO (infrastructure side only)
 - Tests per layer: pure domain tests (no Spring), application tests with mocks, infrastructure tests (`@WebMvcTest`, `@DataJpaTest`), end-to-end integration test
 - Continuous integration on a multi-module Maven build with architectural verification
+- Transactional decorator pattern: `application` stays entirely framework-free, `bootstrap` wraps the one use case implementation that needs atomicity (`CreateOrderService`, via `TransactionalCreateOrderUseCase`) in a `@Transactional` boundary
+- Domain events published only after the surrounding transaction commits (`@TransactionalEventListener(AFTER_COMMIT)`), proven empirically with a rollback test, not just documented
+- Schema migrations (Flyway), `hibernate.ddl-auto=validate` against them as the single source of truth
+- API documentation (springdoc-openapi / Swagger UI)
+- Observability (Spring Boot Actuator)
+- Containerization (Docker, docker-compose) and Testcontainers-backed integration tests against a real PostgreSQL database, never an embedded one
 
 ## How to follow this tutorial
 
@@ -487,4 +494,4 @@ Depends on every module, `test` scope only. Contains no production code.
 2. Follow the modules in order: `feature/domain` → `feature/application` → `feature/infrastructure` → `feature/bootstrap`
 3. Start `feature/arch-test` in parallel as soon as `feature/domain` exists, and enrich it with each new module
 4. Build everything from the root: `mvn clean verify` (ArchUnit tests run alongside regular tests)
-5. Run `bootstrap/target/hexagonal-ddd-tutorial.jar` (or `mvn spring-boot:run -pl bootstrap`), then open Swagger UI at `http://localhost:8080/swagger-ui.html`
+5. Run `bootstrap/target/bootstrap-0.0.1-SNAPSHOT-exec.jar` (the executable jar; the plain `bootstrap-0.0.1-SNAPSHOT.jar` is the thin jar other modules depend on, not runnable on its own), or `mvn spring-boot:run -pl bootstrap`, or `docker compose up`, then open Swagger UI at `http://localhost:8080/swagger-ui.html`

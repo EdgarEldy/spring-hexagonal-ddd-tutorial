@@ -20,8 +20,6 @@
 	<properties>
 		<java.version>17</java.version>
 		<springdoc-openapi.version>2.8.16</springdoc-openapi.version>
-		<mapstruct.version>1.6.3</mapstruct.version>
-		<lombok-mapstruct-binding.version>0.2.0</lombok-mapstruct-binding.version>
 		<archunit.version>1.3.0</archunit.version>
 	</properties>
 
@@ -51,26 +49,16 @@
 				<artifactId>infrastructure</artifactId>
 				<version>${project.version}</version>
 			</dependency>
+			<dependency>
+				<groupId>com.edgareldy</groupId>
+				<artifactId>bootstrap</artifactId>
+				<version>${project.version}</version>
+			</dependency>
 			<!-- Shared versions across modules that need them (infrastructure, arch-test) -->
 			<dependency>
 				<groupId>org.springdoc</groupId>
 				<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
 				<version>${springdoc-openapi.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.mapstruct</groupId>
-				<artifactId>mapstruct</artifactId>
-				<version>${mapstruct.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.mapstruct</groupId>
-				<artifactId>mapstruct-processor</artifactId>
-				<version>${mapstruct.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.projectlombok</groupId>
-				<artifactId>lombok-mapstruct-binding</artifactId>
-				<version>${lombok-mapstruct-binding.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>com.tngtech.archunit</groupId>
