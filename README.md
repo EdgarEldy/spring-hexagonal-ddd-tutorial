@@ -428,13 +428,13 @@ Depends on `application` and `infrastructure`. The only module packaged as an ex
 
 ### Tasks
 
-- [ ] `HexagonalDddTutorialApplication` (`@SpringBootApplication`), with `scanBasePackages`/`@EntityScan`/`@EnableJpaRepositories` explicitly pointing at the `infrastructure` packages (the beans do not live in the same module as the main class)
-- [ ] `application.yml`/`application-dev.yml`/`application-test.yml`: datasource, ports, Actuator configuration
-- [ ] Flyway script `V1__init_schema.sql` (schema including the `order_lines` table)
-- [ ] `OpenApiConfig`
-- [ ] `docker-compose.yml` + `Dockerfile`
-- [ ] `.github/workflows/ci.yml`: multi-module build (`mvn -T 1C clean verify`)
-- [ ] End-to-end integration test (`@SpringBootTest`, Testcontainers) verifying the full chain controller → use case → domain → adapter → database
+- [x] `HexagonalDddTutorialApplication` (`@SpringBootApplication`), with `scanBasePackages`/`@EntityScan`/`@EnableJpaRepositories` explicitly pointing at the `infrastructure` packages (the beans do not live in the same module as the main class)
+- [x] `application.yml`/`application-dev.yml`/`application-test.yml`: datasource, ports, Actuator configuration
+- [x] Flyway script `V1__init_schema.sql` (schema including the `order_lines` table)
+- [x] `OpenApiConfig`
+- [x] `docker-compose.yml` + `Dockerfile`
+- [x] `.github/workflows/ci.yml`: multi-module build (`mvn -T 1C clean verify`)
+- [x] End-to-end integration test (`@SpringBootTest`, Testcontainers) verifying the full chain controller → use case → domain → adapter → database
 
 ## feature/arch-test
 
@@ -447,7 +447,7 @@ Depends on every module, `test` scope only. Contains no production code.
 - [x] `ApplicationDependencyTest`: verifies `application..` never depends on `infrastructure..`, and never declares its own `port.in`/`port.out` package (ports live in `domain` only)
 - [x] `LayeredArchitectureTest`: global rule via `ArchRuleDefinition.layeredArchitecture()` declaring the 4 layers (domain, application, infrastructure, bootstrap) and the allowed access between them
 - [x] `NamingConventionTest`: interfaces in `domain.port.in` end in `UseCase`, those in `domain.port.out` end in `Port`, adapters in `infrastructure.out` end in `Adapter`
-- [ ] These tests run in CI on every Pull Request: any architectural violation fails the build, independently of functional tests (the GitHub Actions workflow itself is a `feature/bootstrap` task, not yet written)
+- [x] These tests run in CI on every Pull Request: any architectural violation fails the build, independently of functional tests (`.github/workflows/ci.yml`, added in `feature/bootstrap`)
 
 ## Order of work
 
@@ -481,6 +481,12 @@ Depends on every module, `test` scope only. Contains no production code.
 - Generic `ApiResponse<T>` DTO (infrastructure side only)
 - Tests per layer: pure domain tests (no Spring), application tests with mocks, infrastructure tests (`@WebMvcTest`, `@DataJpaTest`), end-to-end integration test
 - Continuous integration on a multi-module Maven build with architectural verification
+- Transactional decorator pattern: `application` stays entirely framework-free, `bootstrap` wraps the one use case implementation that needs atomicity (`CreateOrderService`, via `TransactionalCreateOrderUseCase`) in a `@Transactional` boundary
+- Domain events published only after the surrounding transaction commits (`@TransactionalEventListener(AFTER_COMMIT)`), proven empirically with a rollback test, not just documented
+- Schema migrations (Flyway), `hibernate.ddl-auto=validate` against them as the single source of truth
+- API documentation (springdoc-openapi / Swagger UI)
+- Observability (Spring Boot Actuator)
+- Containerization (Docker, docker-compose) and Testcontainers-backed integration tests against a real PostgreSQL database, never an embedded one
 
 ## How to follow this tutorial
 
@@ -488,4 +494,4 @@ Depends on every module, `test` scope only. Contains no production code.
 2. Follow the modules in order: `feature/domain` → `feature/application` → `feature/infrastructure` → `feature/bootstrap`
 3. Start `feature/arch-test` in parallel as soon as `feature/domain` exists, and enrich it with each new module
 4. Build everything from the root: `mvn clean verify` (ArchUnit tests run alongside regular tests)
-5. Run `bootstrap/target/hexagonal-ddd-tutorial.jar` (or `mvn spring-boot:run -pl bootstrap`), then open Swagger UI at `http://localhost:8080/swagger-ui.html`
+5. Run `bootstrap/target/bootstrap-0.0.1-SNAPSHOT-exec.jar` (the executable jar; the plain `bootstrap-0.0.1-SNAPSHOT.jar` is the thin jar other modules depend on, not runnable on its own), or `mvn spring-boot:run -pl bootstrap`, or `docker compose up`, then open Swagger UI at `http://localhost:8080/swagger-ui.html`

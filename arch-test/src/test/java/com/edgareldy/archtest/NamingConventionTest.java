@@ -46,6 +46,5 @@ class NamingConventionTest {
     static final ArchRule adapters_implementing_an_outbound_port_end_with_adapter = classes()
             .that().resideInAPackage("com.edgareldy.infrastructure.out..")
             .and(IMPLEMENTS_AN_OUTBOUND_PORT)
-            .should().haveSimpleNameEndingWith("Adapter")
-            .allowEmptyShould(true);
+            .should().haveSimpleNameEndingWith("Adapter");
 }

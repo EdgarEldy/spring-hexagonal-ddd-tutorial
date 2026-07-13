@@ -29,6 +29,23 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.flywaydb</groupId>
+			<artifactId>flyway-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.flywaydb</groupId>
+			<artifactId>flyway-database-postgresql</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
@@ -54,6 +71,18 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+				<configuration>
+					<!-- Without a classifier, repackage replaces bootstrap's main artifact with
+					     the executable jar, whose classes live under BOOT-INF/classes instead of
+					     the jar root. arch-test depends on bootstrap as a normal dependency to
+					     run its layered-architecture check against it, and silently saw zero
+					     bootstrap classes because of this, discovered empirically via a full
+					     mvn clean verify (an isolated arch-test-only run masked it by reusing
+					     already-built, not-yet-repackaged classes). The classifier keeps the
+					     thin jar as the main artifact other modules resolve normally, and
+					     attaches the runnable jar separately. -->
+					<classifier>exec</classifier>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
