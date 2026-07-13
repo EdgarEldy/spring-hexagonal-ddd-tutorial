@@ -19,5 +19,8 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
+      # -T 1C matches the README's specified command; it has no real effect here since
+      # arch-test depends on every other module, making the 5-module reactor a strictly
+      # linear chain with nothing independent left to parallelize.
       - name: Build and test
         run: ./mvnw -T 1C clean verify
