@@ -29,7 +29,7 @@ class CreateCategoryServiceTest {
     private CategoryRepositoryPort categoryRepositoryPort;
 
     @Test
-    void creates_and_saves_a_category() {
+    void _01_ShouldCreateAndSaveCategory_WhenCommandIsValid() {
         Category saved = Category.reconstitute(1L, "Peripherals");
         when(categoryRepositoryPort.save(any(Category.class))).thenReturn(saved);
         CreateCategoryService service = new CreateCategoryService(categoryRepositoryPort);
