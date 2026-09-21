@@ -58,7 +58,7 @@ class OrderControllerTest {
     private ListOrdersUseCase listOrdersUseCase;
 
     @Test
-    void creates_an_order() throws Exception {
+    void _01_ShouldCreateOrder_WhenRequestIsValid() throws Exception {
         Order order = Order.reconstitute(1L, 7L, List.of(lineOf(9.99, 2)), OrderStatus.PLACED, Instant.now());
         when(createOrderUseCase.createOrder(any())).thenReturn(order);
 
@@ -70,7 +70,7 @@ class OrderControllerTest {
     }
 
     @Test
-    void translates_an_empty_order_into_422() throws Exception {
+    void _02_ShouldReturn422_WhenOrderIsEmpty() throws Exception {
         when(createOrderUseCase.createOrder(any())).thenThrow(new EmptyOrderException());
 
         mockMvc.perform(post("/api/v1/orders").contentType(MediaType.APPLICATION_JSON)
@@ -80,7 +80,7 @@ class OrderControllerTest {
     }
 
     @Test
-    void returns_the_order_when_found() throws Exception {
+    void _03_ShouldReturnOrder_WhenOrderIsFound() throws Exception {
         Order order = Order.reconstitute(1L, 7L, List.of(lineOf(9.99, 2)), OrderStatus.PLACED, Instant.now());
         when(getOrderUseCase.getOrder(1L)).thenReturn(Optional.of(order));
 
@@ -89,19 +89,19 @@ class OrderControllerTest {
     }
 
     @Test
-    void returns_404_when_the_order_is_not_found() throws Exception {
+    void _04_ShouldReturn404_WhenOrderIsNotFound() throws Exception {
         when(getOrderUseCase.getOrder(404L)).thenReturn(Optional.empty());
 
         mockMvc.perform(get("/api/v1/orders/404")).andExpect(status().isNotFound());
     }
 
     @Test
-    void returns_400_for_a_non_numeric_id() throws Exception {
+    void _05_ShouldReturn400_WhenIdIsNotNumeric() throws Exception {
         mockMvc.perform(get("/api/v1/orders/not-a-number")).andExpect(status().isBadRequest());
     }
 
     @Test
-    void returns_500_for_an_unexpected_failure() throws Exception {
+    void _06_ShouldReturn500_WhenUnexpectedFailureOccurs() throws Exception {
         when(getOrderUseCase.getOrder(1L)).thenThrow(new RuntimeException("boom"));
 
         mockMvc.perform(get("/api/v1/orders/1")).andExpect(status().isInternalServerError())
@@ -109,7 +109,7 @@ class OrderControllerTest {
     }
 
     @Test
-    void lists_orders() throws Exception {
+    void _07_ShouldListOrders_WhenOrdersAreRequested() throws Exception {
         Order order = Order.reconstitute(1L, 7L, List.of(lineOf(9.99, 2)), OrderStatus.PLACED, Instant.now());
         PageResult<Order> page = new PageResult<>(List.of(order), 0, 20, 1, 1);
         when(listOrdersUseCase.listOrders(any())).thenReturn(page);

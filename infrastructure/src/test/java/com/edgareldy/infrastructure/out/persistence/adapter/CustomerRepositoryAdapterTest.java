@@ -39,7 +39,7 @@ class CustomerRepositoryAdapterTest {
     }
 
     @Test
-    void saves_and_retrieves_a_customer_by_id() {
+    void _01_ShouldSaveAndRetrieveCustomer_WhenFindingById() {
         Customer saved = adapter.save(
                 Customer.create("Jane", "Doe", "0102030405", new Email("jane@example.com"), "1 rue de Paris"));
 
@@ -50,7 +50,7 @@ class CustomerRepositoryAdapterTest {
     }
 
     @Test
-    void returns_empty_when_not_found() {
+    void _02_ShouldReturnEmpty_WhenCustomerIsNotFound() {
         assertThat(adapter.findById(404L)).isEmpty();
     }
 }

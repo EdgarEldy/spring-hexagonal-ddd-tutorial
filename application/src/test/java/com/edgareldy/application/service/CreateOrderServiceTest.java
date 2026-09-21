@@ -62,7 +62,7 @@ class CreateOrderServiceTest {
     private DomainEventPublisherPort domainEventPublisherPort;
 
     @Test
-    void creates_places_and_persists_an_order_then_publishes_its_event() {
+    void _01_ShouldPlacePersistAndPublishEvent_WhenOrderIsCreated() {
         Customer customer = Customer.reconstitute(7L, "Jane", "Doe", "0102030405", new Email("jane@example.com"),
                 "1 rue de Paris");
         when(customerRepositoryPort.findById(7L)).thenReturn(Optional.of(customer));
@@ -96,7 +96,7 @@ class CreateOrderServiceTest {
     }
 
     @Test
-    void rejects_an_order_for_a_nonexistent_customer() {
+    void _02_ShouldRejectOrder_WhenCustomerDoesNotExist() {
         when(customerRepositoryPort.findById(7L)).thenReturn(Optional.empty());
         CreateOrderService service = new CreateOrderService(orderRepositoryPort, productRepositoryPort,
                 customerRepositoryPort, domainEventPublisherPort);
@@ -108,7 +108,7 @@ class CreateOrderServiceTest {
     }
 
     @Test
-    void rejects_an_order_for_a_nonexistent_product() {
+    void _03_ShouldRejectOrder_WhenProductDoesNotExist() {
         Customer customer = Customer.reconstitute(7L, "Jane", "Doe", "0102030405", new Email("jane@example.com"),
                 "1 rue de Paris");
         when(customerRepositoryPort.findById(7L)).thenReturn(Optional.of(customer));

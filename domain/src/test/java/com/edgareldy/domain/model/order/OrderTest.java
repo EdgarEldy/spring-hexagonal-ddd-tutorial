@@ -28,26 +28,26 @@ class OrderTest {
     private static final Currency EUR = Currency.getInstance("EUR");
 
     @Test
-    void cannot_be_created_without_at_least_one_line() {
+    void _01_ShouldRejectCreation_WhenOrderHasNoLine() {
         assertThatThrownBy(() -> Order.create(1L, List.of())).isInstanceOf(EmptyOrderException.class);
     }
 
     @Test
-    void cannot_be_placed_without_at_least_one_line() {
+    void _02_ShouldRejectPlacement_WhenOrderHasNoLine() {
         Order order = Order.reconstitute(99L, 1L, List.of(), OrderStatus.DRAFT, null);
 
         assertThatThrownBy(order::place).isInstanceOf(EmptyOrderException.class);
     }
 
     @Test
-    void cannot_be_placed_before_being_saved() {
+    void _03_ShouldRejectPlacement_WhenOrderHasNotBeenSaved() {
         Order order = Order.create(1L, List.of(lineOf(9.99, 1)));
 
         assertThatThrownBy(order::place).isInstanceOf(IllegalStateException.class);
     }
 
     @Test
-    void placing_transitions_status_to_placed_and_stamps_placedAt() {
+    void _04_ShouldTransitionToPlacedAndStampPlacedAt_WhenOrderIsPlaced() {
         Order order = Order.reconstitute(99L, 1L, List.of(lineOf(9.99, 2)), OrderStatus.DRAFT, null);
 
         order.place();
@@ -57,7 +57,7 @@ class OrderTest {
     }
 
     @Test
-    void placing_raises_an_order_placed_event_carrying_the_recomputed_total() {
+    void _05_ShouldRaiseOrderPlacedEventWithRecomputedTotal_WhenOrderIsPlaced() {
         Order order = Order.reconstitute(99L, 7L, List.of(lineOf(10, 2), lineOf(5, 1)), OrderStatus.DRAFT, null);
 
         order.place();
@@ -70,7 +70,7 @@ class OrderTest {
     }
 
     @Test
-    void pulling_domain_events_drains_them() {
+    void _06_ShouldDrainEvents_WhenDomainEventsArePulled() {
         Order order = Order.reconstitute(99L, 1L, List.of(lineOf(9.99, 1)), OrderStatus.DRAFT, null);
         order.place();
 
@@ -81,7 +81,7 @@ class OrderTest {
     }
 
     @Test
-    void cannot_be_placed_twice() {
+    void _07_ShouldRejectPlacement_WhenOrderIsAlreadyPlaced() {
         Order order = Order.reconstitute(99L, 1L, List.of(lineOf(9.99, 1)), OrderStatus.DRAFT, null);
         order.place();
 
@@ -89,14 +89,14 @@ class OrderTest {
     }
 
     @Test
-    void total_is_always_recomputed_from_the_lines() {
+    void _08_ShouldRecomputeTotalFromLines_WhenTotalIsRequested() {
         Order order = Order.create(1L, List.of(lineOf(10, 2), lineOf(5, 3)));
 
         assertThat(order.getTotal().amount()).isEqualByComparingTo(BigDecimal.valueOf(35));
     }
 
     @Test
-    void reconstituting_an_already_placed_order_does_not_raise_a_new_event() {
+    void _09_ShouldNotRaiseNewEvent_WhenPlacedOrderIsReconstituted() {
         Order order = Order.reconstitute(42L, 1L, List.of(lineOf(9.99, 1)), OrderStatus.PLACED, Instant.now());
 
         assertThat(order.pullDomainEvents()).isEmpty();

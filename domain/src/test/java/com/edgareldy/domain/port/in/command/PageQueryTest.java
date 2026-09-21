@@ -15,12 +15,12 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class PageQueryTest {
 
     @Test
-    void rejects_a_negative_page() {
+    void _01_ShouldRejectQuery_WhenPageIsNegative() {
         assertThatThrownBy(() -> new PageQuery(-1, 10)).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
-    void rejects_a_zero_or_negative_size() {
+    void _02_ShouldRejectQuery_WhenSizeIsZeroOrNegative() {
         assertThatThrownBy(() -> new PageQuery(0, 0)).isInstanceOf(IllegalArgumentException.class);
     }
 }

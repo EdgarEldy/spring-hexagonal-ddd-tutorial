@@ -44,7 +44,7 @@ class CreateProductServiceTest {
     private CategoryRepositoryPort categoryRepositoryPort;
 
     @Test
-    void creates_and_saves_a_product_when_the_category_exists() {
+    void _01_ShouldCreateAndSaveProduct_WhenCategoryExists() {
         when(categoryRepositoryPort.findById(1L)).thenReturn(Optional.of(Category.reconstitute(1L, "Peripherals")));
         Product saved = Product.reconstitute(10L, 1L, "Mechanical keyboard", UNIT_PRICE);
         when(productRepositoryPort.save(any(Product.class))).thenReturn(saved);
@@ -56,7 +56,7 @@ class CreateProductServiceTest {
     }
 
     @Test
-    void rejects_a_product_for_a_nonexistent_category() {
+    void _02_ShouldRejectProduct_WhenCategoryDoesNotExist() {
         when(categoryRepositoryPort.findById(1L)).thenReturn(Optional.empty());
         CreateProductService service = new CreateProductService(productRepositoryPort, categoryRepositoryPort);
         CreateProductCommand command = new CreateProductCommand(1L, "Mechanical keyboard", UNIT_PRICE);

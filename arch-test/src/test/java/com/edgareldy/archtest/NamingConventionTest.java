@@ -31,19 +31,19 @@ class NamingConventionTest {
                     .anyMatch(rawInterface -> rawInterface.getPackageName().equals("com.edgareldy.domain.port.out")));
 
     @ArchTest
-    static final ArchRule inbound_port_interfaces_end_with_use_case = classes()
+    static final ArchRule _01_ShouldEndWithUseCase_WhenClassIsAnInboundPortInterface = classes()
             .that().resideInAPackage("com.edgareldy.domain.port.in")
             .and().areInterfaces()
             .should().haveSimpleNameEndingWith("UseCase");
 
     @ArchTest
-    static final ArchRule outbound_port_interfaces_end_with_port = classes()
+    static final ArchRule _02_ShouldEndWithPort_WhenClassIsAnOutboundPortInterface = classes()
             .that().resideInAPackage("com.edgareldy.domain.port.out")
             .and().areInterfaces()
             .should().haveSimpleNameEndingWith("Port");
 
     @ArchTest
-    static final ArchRule adapters_implementing_an_outbound_port_end_with_adapter = classes()
+    static final ArchRule _03_ShouldEndWithAdapter_WhenClassImplementsAnOutboundPort = classes()
             .that().resideInAPackage("com.edgareldy.infrastructure.out..")
             .and(IMPLEMENTS_AN_OUTBOUND_PORT)
             .should().haveSimpleNameEndingWith("Adapter");

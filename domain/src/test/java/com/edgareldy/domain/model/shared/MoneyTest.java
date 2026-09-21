@@ -22,20 +22,20 @@ class MoneyTest {
     private static final Currency USD = Currency.getInstance("USD");
 
     @Test
-    void rejects_negative_amount() {
+    void _01_ShouldRejectMoney_WhenAmountIsNegative() {
         assertThatThrownBy(() -> new Money(BigDecimal.valueOf(-1), EUR))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
-    void accepts_zero_amount() {
+    void _02_ShouldAcceptMoney_WhenAmountIsZero() {
         Money money = new Money(BigDecimal.ZERO, EUR);
 
         assertThat(money.amount()).isEqualByComparingTo(BigDecimal.ZERO);
     }
 
     @Test
-    void adds_amounts_in_the_same_currency() {
+    void _03_ShouldAddAmounts_WhenCurrenciesMatch() {
         Money first = new Money(BigDecimal.valueOf(10), EUR);
         Money second = new Money(BigDecimal.valueOf(5), EUR);
 
@@ -46,7 +46,7 @@ class MoneyTest {
     }
 
     @Test
-    void rejects_adding_amounts_in_different_currencies() {
+    void _04_ShouldRejectAddition_WhenCurrenciesDiffer() {
         Money first = new Money(BigDecimal.valueOf(10), EUR);
         Money second = new Money(BigDecimal.valueOf(5), USD);
 
@@ -54,7 +54,7 @@ class MoneyTest {
     }
 
     @Test
-    void multiplies_by_a_positive_factor() {
+    void _05_ShouldMultiplyAmount_WhenFactorIsPositive() {
         Money unitPrice = new Money(BigDecimal.valueOf(9.99), EUR);
 
         Money subtotal = unitPrice.multiply(3);
@@ -63,14 +63,14 @@ class MoneyTest {
     }
 
     @Test
-    void rejects_a_negative_multiplication_factor() {
+    void _06_ShouldRejectMultiplication_WhenFactorIsNegative() {
         Money unitPrice = new Money(BigDecimal.valueOf(9.99), EUR);
 
         assertThatThrownBy(() -> unitPrice.multiply(-1)).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
-    void zero_returns_a_zero_amount_in_the_given_currency() {
+    void _07_ShouldReturnZeroAmount_WhenZeroIsRequestedInACurrency() {
         Money zero = Money.zero(EUR);
 
         assertThat(zero.amount()).isEqualByComparingTo(BigDecimal.ZERO);
@@ -78,7 +78,7 @@ class MoneyTest {
     }
 
     @Test
-    void two_amounts_with_different_scale_but_the_same_value_are_equal() {
+    void _08_ShouldBeEqual_WhenAmountsHaveDifferentScaleButSameValue() {
         Money first = new Money(new BigDecimal("9.90"), EUR);
         Money second = new Money(new BigDecimal("9.9"), EUR);
 
