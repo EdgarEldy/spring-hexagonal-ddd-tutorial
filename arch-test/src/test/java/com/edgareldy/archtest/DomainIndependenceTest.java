@@ -20,19 +20,19 @@ import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
 class DomainIndependenceTest {
 
     @ArchTest
-    static final ArchRule domain_does_not_depend_on_other_modules = noClasses()
+    static final ArchRule _01_ShouldNotDependOnOtherModules_WhenClassIsInDomain = noClasses()
             .that().resideInAPackage("com.edgareldy.domain..")
             .should().dependOnClassesThat()
             .resideInAnyPackage("com.edgareldy.application..", "com.edgareldy.infrastructure..",
                     "com.edgareldy.bootstrap..");
 
     @ArchTest
-    static final ArchRule domain_does_not_depend_on_spring = noClasses()
+    static final ArchRule _02_ShouldNotDependOnSpring_WhenClassIsInDomain = noClasses()
             .that().resideInAPackage("com.edgareldy.domain..")
             .should().dependOnClassesThat().resideInAnyPackage("org.springframework..");
 
     @ArchTest
-    static final ArchRule domain_does_not_depend_on_jpa = noClasses()
+    static final ArchRule _03_ShouldNotDependOnJpa_WhenClassIsInDomain = noClasses()
             .that().resideInAPackage("com.edgareldy.domain..")
             .should().dependOnClassesThat().resideInAnyPackage("jakarta.persistence..");
 }
