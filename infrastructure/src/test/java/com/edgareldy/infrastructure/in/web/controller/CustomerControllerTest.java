@@ -44,7 +44,7 @@ class CustomerControllerTest {
     private GetCustomerUseCase getCustomerUseCase;
 
     @Test
-    void creates_a_customer() throws Exception {
+    void _01_ShouldCreateCustomer_WhenRequestIsValid() throws Exception {
         when(createCustomerUseCase.createCustomer(any())).thenReturn(
                 Customer.reconstitute(1L, "Jane", "Doe", "0102030405", new Email("jane@example.com"),
                         "1 rue de Paris"));
@@ -57,7 +57,7 @@ class CustomerControllerTest {
     }
 
     @Test
-    void returns_the_customer_when_found() throws Exception {
+    void _02_ShouldReturnCustomer_WhenCustomerIsFound() throws Exception {
         when(getCustomerUseCase.getCustomer(1L)).thenReturn(Optional.of(
                 Customer.reconstitute(1L, "Jane", "Doe", "0102030405", new Email("jane@example.com"),
                         "1 rue de Paris")));
@@ -68,7 +68,7 @@ class CustomerControllerTest {
     }
 
     @Test
-    void returns_404_when_the_customer_is_not_found() throws Exception {
+    void _03_ShouldReturn404_WhenCustomerIsNotFound() throws Exception {
         when(getCustomerUseCase.getCustomer(404L)).thenReturn(Optional.empty());
 
         mockMvc.perform(get("/api/v1/customers/404"))
@@ -77,7 +77,7 @@ class CustomerControllerTest {
     }
 
     @Test
-    void translates_a_malformed_email_into_400() throws Exception {
+    void _04_ShouldReturn400_WhenEmailIsMalformed() throws Exception {
         when(createCustomerUseCase.createCustomer(any())).thenThrow(
                 new IllegalArgumentException("invalid email format: not-an-email"));
 
