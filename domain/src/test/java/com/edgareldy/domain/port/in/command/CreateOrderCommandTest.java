@@ -19,18 +19,18 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class CreateOrderCommandTest {
 
     @Test
-    void rejects_a_missing_customer_id() {
+    void _01_ShouldRejectCommand_WhenCustomerIdIsMissing() {
         assertThatThrownBy(() -> new CreateOrderCommand(null, List.of(new CreateOrderLineCommand(1L, 1))))
                 .isInstanceOf(NullPointerException.class);
     }
 
     @Test
-    void rejects_missing_lines() {
+    void _02_ShouldRejectCommand_WhenLinesAreMissing() {
         assertThatThrownBy(() -> new CreateOrderCommand(1L, null)).isInstanceOf(NullPointerException.class);
     }
 
     @Test
-    void lines_are_defensively_copied() {
+    void _03_ShouldCopyLinesDefensively_WhenCommandIsCreated() {
         List<CreateOrderLineCommand> mutable = new ArrayList<>(List.of(new CreateOrderLineCommand(1L, 1)));
         CreateOrderCommand command = new CreateOrderCommand(1L, mutable);
 

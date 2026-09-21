@@ -21,19 +21,19 @@ class CreateProductCommandTest {
     private static final Money UNIT_PRICE = new Money(BigDecimal.TEN, Currency.getInstance("EUR"));
 
     @Test
-    void rejects_a_missing_category_id() {
+    void _01_ShouldRejectCommand_WhenCategoryIdIsMissing() {
         assertThatThrownBy(() -> new CreateProductCommand(null, "Mechanical keyboard", UNIT_PRICE))
                 .isInstanceOf(NullPointerException.class);
     }
 
     @Test
-    void rejects_a_missing_name() {
+    void _02_ShouldRejectCommand_WhenNameIsMissing() {
         assertThatThrownBy(() -> new CreateProductCommand(1L, null, UNIT_PRICE))
                 .isInstanceOf(NullPointerException.class);
     }
 
     @Test
-    void rejects_a_missing_unit_price() {
+    void _03_ShouldRejectCommand_WhenUnitPriceIsMissing() {
         assertThatThrownBy(() -> new CreateProductCommand(1L, "Mechanical keyboard", null))
                 .isInstanceOf(NullPointerException.class);
     }

@@ -22,18 +22,18 @@ class ProductTest {
     private static final Money UNIT_PRICE = new Money(BigDecimal.valueOf(9.99), Currency.getInstance("EUR"));
 
     @Test
-    void rejects_a_missing_category() {
+    void _01_ShouldRejectProduct_WhenCategoryIsMissing() {
         assertThatThrownBy(() -> Product.create(null, "Mechanical keyboard", UNIT_PRICE))
                 .isInstanceOf(NullPointerException.class);
     }
 
     @Test
-    void rejects_a_blank_name() {
+    void _02_ShouldRejectProduct_WhenNameIsBlank() {
         assertThatThrownBy(() -> Product.create(1L, " ", UNIT_PRICE)).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
-    void two_instances_with_the_same_id_are_equal_regardless_of_fields() {
+    void _03_ShouldBeEqual_WhenInstancesShareTheSameIdRegardlessOfFields() {
         Product first = Product.reconstitute(1L, 1L, "Mechanical keyboard", UNIT_PRICE);
         Product second = Product.reconstitute(1L, 2L, "Renamed", UNIT_PRICE);
 
