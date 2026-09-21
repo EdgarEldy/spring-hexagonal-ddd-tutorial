@@ -36,7 +36,7 @@ class ListOrdersServiceTest {
     private OrderRepositoryPort orderRepositoryPort;
 
     @Test
-    void delegates_to_the_repository_port() {
+    void _01_ShouldDelegateToRepositoryPort_WhenOrdersAreListed() {
         PageQuery query = new PageQuery(0, 10);
         Money unitPrice = new Money(BigDecimal.valueOf(9.99), Currency.getInstance("EUR"));
         OrderLine line = OrderLine.of(1L, "Mechanical keyboard", 1, unitPrice);
