@@ -47,7 +47,7 @@ class CategoryControllerTest {
     private ListCategoriesUseCase listCategoriesUseCase;
 
     @Test
-    void creates_a_category() throws Exception {
+    void _01_ShouldCreateCategory_WhenRequestIsValid() throws Exception {
         when(createCategoryUseCase.createCategory(any())).thenReturn(Category.reconstitute(1L, "Peripherals"));
 
         mockMvc.perform(post("/api/v1/categories").contentType(MediaType.APPLICATION_JSON)
@@ -59,7 +59,7 @@ class CategoryControllerTest {
     }
 
     @Test
-    void lists_categories() throws Exception {
+    void _02_ShouldListCategories_WhenCategoriesAreRequested() throws Exception {
         PageResult<Category> page = new PageResult<>(List.of(Category.reconstitute(1L, "Peripherals")), 0, 20, 1, 1);
         when(listCategoriesUseCase.listCategories(any())).thenReturn(page);
 
@@ -70,7 +70,7 @@ class CategoryControllerTest {
     }
 
     @Test
-    void rejects_a_malformed_request_body() throws Exception {
+    void _03_ShouldReturn400_WhenRequestBodyIsMalformed() throws Exception {
         mockMvc.perform(post("/api/v1/categories").contentType(MediaType.APPLICATION_JSON).content("not json"))
                 .andExpect(status().isBadRequest());
 
@@ -78,7 +78,7 @@ class CategoryControllerTest {
     }
 
     @Test
-    void rejects_an_unsupported_http_method() throws Exception {
+    void _04_ShouldReturn405_WhenHttpMethodIsUnsupported() throws Exception {
         mockMvc.perform(delete("/api/v1/categories")).andExpect(status().isMethodNotAllowed());
     }
 }
