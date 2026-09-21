@@ -16,12 +16,12 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class CategoryTest {
 
     @Test
-    void rejects_a_blank_name() {
+    void _01_ShouldRejectCategory_WhenNameIsBlank() {
         assertThatThrownBy(() -> Category.create(" ")).isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
-    void two_instances_with_the_same_id_are_equal_regardless_of_name() {
+    void _02_ShouldBeEqual_WhenInstancesShareTheSameIdRegardlessOfName() {
         Category first = Category.reconstitute(1L, "Peripherals");
         Category second = Category.reconstitute(1L, "Renamed");
 
@@ -29,7 +29,7 @@ class CategoryTest {
     }
 
     @Test
-    void a_newly_created_category_has_no_id_yet() {
+    void _03_ShouldHaveNoIdYet_WhenCategoryIsNewlyCreated() {
         Category category = Category.create("Peripherals");
 
         assertThat(category.getId()).isNull();
