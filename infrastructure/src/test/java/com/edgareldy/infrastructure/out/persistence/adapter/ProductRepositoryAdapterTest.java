@@ -46,7 +46,7 @@ class ProductRepositoryAdapterTest {
     }
 
     @Test
-    void saves_and_retrieves_a_product_by_id() {
+    void _01_ShouldSaveAndRetrieveProduct_WhenFindingById() {
         Product saved = adapter.save(Product.create(1L, "Mechanical keyboard", UNIT_PRICE));
 
         Optional<Product> found = adapter.findById(saved.getId());
@@ -56,7 +56,7 @@ class ProductRepositoryAdapterTest {
     }
 
     @Test
-    void filters_by_category_id() {
+    void _02_ShouldFilterProducts_WhenCategoryIdIsGiven() {
         adapter.save(Product.create(1L, "Mechanical keyboard", UNIT_PRICE));
         adapter.save(Product.create(2L, "Standing desk", UNIT_PRICE));
 
@@ -67,7 +67,7 @@ class ProductRepositoryAdapterTest {
     }
 
     @Test
-    void lists_every_product_when_no_category_filter_is_given() {
+    void _03_ShouldListEveryProduct_WhenNoCategoryFilterIsGiven() {
         adapter.save(Product.create(1L, "Mechanical keyboard", UNIT_PRICE));
         adapter.save(Product.create(2L, "Standing desk", UNIT_PRICE));
 

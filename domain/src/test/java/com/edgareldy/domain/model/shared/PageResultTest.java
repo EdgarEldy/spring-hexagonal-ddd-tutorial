@@ -19,13 +19,13 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class PageResultTest {
 
     @Test
-    void rejects_null_content() {
+    void _01_ShouldRejectPage_WhenContentIsNull() {
         assertThatThrownBy(() -> new PageResult<String>(null, 0, 10, 0, 0))
                 .isInstanceOf(NullPointerException.class);
     }
 
     @Test
-    void content_is_defensively_copied() {
+    void _02_ShouldCopyContentDefensively_WhenPageIsCreated() {
         List<String> mutable = new ArrayList<>(List.of("a", "b"));
         PageResult<String> page = new PageResult<>(mutable, 0, 10, 2, 1);
 

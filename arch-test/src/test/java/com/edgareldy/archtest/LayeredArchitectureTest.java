@@ -21,7 +21,7 @@ import static com.tngtech.archunit.library.Architectures.layeredArchitecture;
 class LayeredArchitectureTest {
 
     @ArchTest
-    static final ArchRule layer_dependencies_are_respected = layeredArchitecture()
+    static final ArchRule _01_ShouldRespectLayerDependencies_WhenModulesReferenceEachOther = layeredArchitecture()
             .consideringAllDependencies()
             .layer("Domain").definedBy("com.edgareldy.domain..")
             .layer("Application").definedBy("com.edgareldy.application..")

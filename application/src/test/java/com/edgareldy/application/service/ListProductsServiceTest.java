@@ -34,7 +34,7 @@ class ListProductsServiceTest {
     private ProductRepositoryPort productRepositoryPort;
 
     @Test
-    void delegates_to_the_repository_port() {
+    void _01_ShouldDelegateToRepositoryPort_WhenProductsAreListed() {
         ListProductsQuery query = new ListProductsQuery(1L, new PageQuery(0, 10));
         Money unitPrice = new Money(BigDecimal.valueOf(9.99), Currency.getInstance("EUR"));
         Product product = Product.reconstitute(10L, 1L, "Mechanical keyboard", unitPrice);

@@ -20,13 +20,13 @@ import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
 class ApplicationDependencyTest {
 
     @ArchTest
-    static final ArchRule application_does_not_depend_on_infrastructure_or_bootstrap = noClasses()
+    static final ArchRule _01_ShouldNotDependOnInfrastructureOrBootstrap_WhenClassIsInApplication = noClasses()
             .that().resideInAPackage("com.edgareldy.application..")
             .should().dependOnClassesThat()
             .resideInAnyPackage("com.edgareldy.infrastructure..", "com.edgareldy.bootstrap..");
 
     @ArchTest
-    static final ArchRule application_declares_no_port_package = noClasses()
+    static final ArchRule _02_ShouldDeclareNoPortPackage_WhenClassIsInApplication = noClasses()
             .that().resideInAPackage("com.edgareldy.application..")
             .should().resideInAPackage("..port..");
 }

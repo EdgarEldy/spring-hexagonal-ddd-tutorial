@@ -22,25 +22,25 @@ class OrderPlacedEventTest {
     private static final Money TOTAL = new Money(BigDecimal.TEN, Currency.getInstance("EUR"));
 
     @Test
-    void rejects_a_missing_order_id() {
+    void _01_ShouldRejectEvent_WhenOrderIdIsMissing() {
         assertThatThrownBy(() -> new OrderPlacedEvent(null, 1L, TOTAL, Instant.now()))
                 .isInstanceOf(NullPointerException.class);
     }
 
     @Test
-    void rejects_a_missing_customer_id() {
+    void _02_ShouldRejectEvent_WhenCustomerIdIsMissing() {
         assertThatThrownBy(() -> new OrderPlacedEvent(1L, null, TOTAL, Instant.now()))
                 .isInstanceOf(NullPointerException.class);
     }
 
     @Test
-    void rejects_a_missing_total() {
+    void _03_ShouldRejectEvent_WhenTotalIsMissing() {
         assertThatThrownBy(() -> new OrderPlacedEvent(1L, 1L, null, Instant.now()))
                 .isInstanceOf(NullPointerException.class);
     }
 
     @Test
-    void rejects_a_missing_occurred_on() {
+    void _04_ShouldRejectEvent_WhenOccurredOnIsMissing() {
         assertThatThrownBy(() -> new OrderPlacedEvent(1L, 1L, TOTAL, null))
                 .isInstanceOf(NullPointerException.class);
     }

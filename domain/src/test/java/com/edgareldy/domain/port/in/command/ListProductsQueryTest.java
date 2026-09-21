@@ -15,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class ListProductsQueryTest {
 
     @Test
-    void rejects_a_missing_page() {
+    void _01_ShouldRejectQuery_WhenPageIsMissing() {
         assertThatThrownBy(() -> new ListProductsQuery(1L, null)).isInstanceOf(NullPointerException.class);
     }
 }

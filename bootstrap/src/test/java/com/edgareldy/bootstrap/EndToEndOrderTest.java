@@ -66,7 +66,7 @@ class EndToEndOrderTest {
     private OrderRepositoryPort orderRepositoryPort;
 
     @Test
-    void places_an_order_through_the_full_chain_and_publishes_the_event_after_commit() throws Exception {
+    void _01_ShouldPlaceOrderAndPublishEventAfterCommit_WhenOrderGoesThroughTheFullChain() throws Exception {
         Long categoryId = createCategory("Peripherals");
         Long productId = createProduct(categoryId, "Mechanical keyboard");
         Long customerId = createCustomer("jane.success@example.com");
@@ -90,7 +90,7 @@ class EndToEndOrderTest {
     }
 
     @Test
-    void a_failure_on_the_second_save_rolls_back_everything_and_never_publishes_the_event() throws Exception {
+    void _02_ShouldRollBackEverythingAndPublishNoEvent_WhenSecondSaveFails() throws Exception {
         Long categoryId = createCategory("Furniture");
         Long productId = createProduct(categoryId, "Standing desk");
         Long customerId = createCustomer("jane.rollback@example.com");
