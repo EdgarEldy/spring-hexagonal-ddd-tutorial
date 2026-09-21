@@ -18,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class EmailTest {
 
     @Test
-    void accepts_a_well_formed_address() {
+    void _01_ShouldAcceptEmail_WhenAddressIsWellFormed() {
         Email email = new Email("customer@example.com");
 
         assertThat(email.value()).isEqualTo("customer@example.com");
@@ -26,7 +26,7 @@ class EmailTest {
 
     @ParameterizedTest
     @ValueSource(strings = {"not-an-email", "missing-domain@", "@missing-local.com", "spaces in@address.com"})
-    void rejects_a_malformed_address(String invalid) {
+    void _02_ShouldRejectEmail_WhenAddressIsMalformed(String invalid) {
         assertThatThrownBy(() -> new Email(invalid)).isInstanceOf(IllegalArgumentException.class);
     }
 }

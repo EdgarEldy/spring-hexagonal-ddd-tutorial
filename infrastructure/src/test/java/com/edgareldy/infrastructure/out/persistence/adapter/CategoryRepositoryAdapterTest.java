@@ -41,7 +41,7 @@ class CategoryRepositoryAdapterTest {
     }
 
     @Test
-    void saves_and_retrieves_a_category_by_id() {
+    void _01_ShouldSaveAndRetrieveCategory_WhenFindingById() {
         Category saved = adapter.save(Category.create("Peripherals"));
 
         Optional<Category> found = adapter.findById(saved.getId());
@@ -52,12 +52,12 @@ class CategoryRepositoryAdapterTest {
     }
 
     @Test
-    void returns_empty_when_not_found() {
+    void _02_ShouldReturnEmpty_WhenCategoryIsNotFound() {
         assertThat(adapter.findById(404L)).isEmpty();
     }
 
     @Test
-    void lists_categories_paginated() {
+    void _03_ShouldListCategoriesPaginated_WhenPageIsRequested() {
         adapter.save(Category.create("Peripherals"));
         adapter.save(Category.create("Furniture"));
 

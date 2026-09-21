@@ -15,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class CreateCategoryCommandTest {
 
     @Test
-    void rejects_a_missing_name() {
+    void _01_ShouldRejectCommand_WhenNameIsMissing() {
         assertThatThrownBy(() -> new CreateCategoryCommand(null)).isInstanceOf(NullPointerException.class);
     }
 }

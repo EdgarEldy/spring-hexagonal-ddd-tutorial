@@ -15,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class CreateCustomerCommandTest {
 
     @Test
-    void rejects_a_missing_email() {
+    void _01_ShouldRejectCommand_WhenEmailIsMissing() {
         assertThatThrownBy(() -> new CreateCustomerCommand("Jane", "Doe", "0102030405", null, "1 rue de Paris"))
                 .isInstanceOf(NullPointerException.class);
     }

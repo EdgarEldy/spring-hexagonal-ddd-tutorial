@@ -15,12 +15,12 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 class CreateOrderLineCommandTest {
 
     @Test
-    void rejects_a_missing_product_id() {
+    void _01_ShouldRejectCommand_WhenProductIdIsMissing() {
         assertThatThrownBy(() -> new CreateOrderLineCommand(null, 1)).isInstanceOf(NullPointerException.class);
     }
 
     @Test
-    void rejects_a_zero_or_negative_quantity() {
+    void _02_ShouldRejectCommand_WhenQuantityIsZeroOrNegative() {
         assertThatThrownBy(() -> new CreateOrderLineCommand(1L, 0)).isInstanceOf(IllegalArgumentException.class);
     }
 }

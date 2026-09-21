@@ -19,13 +19,13 @@ class CustomerTest {
     private static final Email EMAIL = new Email("customer@example.com");
 
     @Test
-    void rejects_a_blank_first_name() {
+    void _01_ShouldRejectCustomer_WhenFirstNameIsBlank() {
         assertThatThrownBy(() -> Customer.create(" ", "Doe", "0102030405", EMAIL, "1 rue de Paris"))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
     @Test
-    void two_instances_with_the_same_id_are_equal_regardless_of_fields() {
+    void _02_ShouldBeEqual_WhenInstancesShareTheSameIdRegardlessOfFields() {
         Customer first = Customer.reconstitute(1L, "Jane", "Doe", "0102030405", EMAIL, "1 rue de Paris");
         Customer second = Customer.reconstitute(1L, "John", "Smith", "0605040302", EMAIL, "2 rue de Lyon");
 

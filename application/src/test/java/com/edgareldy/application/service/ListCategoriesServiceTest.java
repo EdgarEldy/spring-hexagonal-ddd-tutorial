@@ -30,7 +30,7 @@ class ListCategoriesServiceTest {
     private CategoryRepositoryPort categoryRepositoryPort;
 
     @Test
-    void delegates_to_the_repository_port() {
+    void _01_ShouldDelegateToRepositoryPort_WhenCategoriesAreListed() {
         PageQuery query = new PageQuery(0, 10);
         PageResult<Category> page = new PageResult<>(List.of(Category.reconstitute(1L, "Peripherals")), 0, 10, 1, 1);
         when(categoryRepositoryPort.findAll(query)).thenReturn(page);

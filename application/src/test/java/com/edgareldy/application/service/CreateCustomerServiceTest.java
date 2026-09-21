@@ -32,7 +32,7 @@ class CreateCustomerServiceTest {
     private CustomerRepositoryPort customerRepositoryPort;
 
     @Test
-    void creates_and_saves_a_customer_with_a_valid_email() {
+    void _01_ShouldCreateAndSaveCustomer_WhenEmailIsValid() {
         Customer saved = Customer.reconstitute(1L, "Jane", "Doe", "0102030405", new Email("jane@example.com"),
                 "1 rue de Paris");
         when(customerRepositoryPort.save(any(Customer.class))).thenReturn(saved);
@@ -46,7 +46,7 @@ class CreateCustomerServiceTest {
     }
 
     @Test
-    void rejects_a_malformed_email_before_touching_the_repository() {
+    void _02_ShouldRejectBeforeTouchingRepository_WhenEmailIsMalformed() {
         CreateCustomerService service = new CreateCustomerService(customerRepositoryPort);
         CreateCustomerCommand command = new CreateCustomerCommand("Jane", "Doe", "0102030405", "not-an-email",
                 "1 rue de Paris");

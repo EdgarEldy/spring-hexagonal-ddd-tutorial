@@ -50,7 +50,7 @@ class ProductControllerTest {
     private ListProductsUseCase listProductsUseCase;
 
     @Test
-    void creates_a_product() throws Exception {
+    void _01_ShouldCreateProduct_WhenRequestIsValid() throws Exception {
         when(createProductUseCase.createProduct(any())).thenReturn(
                 Product.reconstitute(1L, 2L, "Mechanical keyboard", UNIT_PRICE));
 
@@ -63,7 +63,7 @@ class ProductControllerTest {
     }
 
     @Test
-    void translates_a_missing_category_into_422() throws Exception {
+    void _02_ShouldReturn422_WhenCategoryIsMissing() throws Exception {
         when(createProductUseCase.createProduct(any())).thenThrow(new CategoryNotFoundException(2L));
 
         mockMvc.perform(post("/api/v1/products").contentType(MediaType.APPLICATION_JSON)
@@ -74,7 +74,7 @@ class ProductControllerTest {
     }
 
     @Test
-    void lists_products_filtered_by_category() throws Exception {
+    void _03_ShouldListFilteredProducts_WhenCategoryFilterIsGiven() throws Exception {
         PageResult<Product> page = new PageResult<>(
                 List.of(Product.reconstitute(1L, 2L, "Mechanical keyboard", UNIT_PRICE)), 0, 20, 1, 1);
         when(listProductsUseCase.listProducts(any())).thenReturn(page);

@@ -29,7 +29,7 @@ class GetCustomerServiceTest {
     private CustomerRepositoryPort customerRepositoryPort;
 
     @Test
-    void returns_the_customer_when_found() {
+    void _01_ShouldReturnCustomer_WhenCustomerIsFound() {
         Customer customer = Customer.reconstitute(1L, "Jane", "Doe", "0102030405", new Email("jane@example.com"),
                 "1 rue de Paris");
         when(customerRepositoryPort.findById(1L)).thenReturn(Optional.of(customer));
@@ -41,7 +41,7 @@ class GetCustomerServiceTest {
     }
 
     @Test
-    void returns_empty_when_not_found() {
+    void _02_ShouldReturnEmpty_WhenCustomerIsNotFound() {
         when(customerRepositoryPort.findById(404L)).thenReturn(Optional.empty());
         GetCustomerService service = new GetCustomerService(customerRepositoryPort);
 

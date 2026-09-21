@@ -52,7 +52,7 @@ class OrderRepositoryAdapterTest {
     }
 
     @Test
-    void saves_a_new_order_and_assigns_an_id() {
+    void _01_ShouldSaveOrderAndAssignId_WhenOrderIsNew() {
         Order order = Order.create(1L, List.of(lineOf(9.99, 2)));
 
         Order saved = adapter.save(order);
@@ -62,7 +62,7 @@ class OrderRepositoryAdapterTest {
     }
 
     @Test
-    void reads_lines_back_without_a_lazy_initialization_exception() {
+    void _02_ShouldReadLinesBack_WhenOrderIsLoadedWithoutLazyInitializationException() {
         Order saved = adapter.save(Order.create(1L, List.of(lineOf(9.99, 2), lineOf(5, 1))));
 
         Optional<Order> found = adapter.findById(saved.getId());
@@ -72,7 +72,7 @@ class OrderRepositoryAdapterTest {
     }
 
     @Test
-    void updating_status_after_place_does_not_touch_the_lines_or_the_total() {
+    void _03_ShouldLeaveLinesAndTotalUntouched_WhenStatusIsUpdatedAfterPlacement() {
         Order saved = adapter.save(Order.create(1L, List.of(lineOf(9.99, 2))));
         saved.place();
 
@@ -88,7 +88,7 @@ class OrderRepositoryAdapterTest {
     }
 
     @Test
-    void lists_orders_with_lines_loaded_paginated() {
+    void _04_ShouldListOrdersWithLines_WhenPageIsRequested() {
         adapter.save(Order.create(1L, List.of(lineOf(9.99, 2))));
         adapter.save(Order.create(2L, List.of(lineOf(5, 1))));
 

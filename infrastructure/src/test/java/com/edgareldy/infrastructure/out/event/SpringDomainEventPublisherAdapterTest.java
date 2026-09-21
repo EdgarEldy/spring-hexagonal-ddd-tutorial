@@ -28,7 +28,7 @@ class SpringDomainEventPublisherAdapterTest {
     private DomainEvent event;
 
     @Test
-    void delegates_the_event_to_the_application_event_publisher() {
+    void _01_ShouldDelegateEventToApplicationEventPublisher_WhenEventIsPublished() {
         SpringDomainEventPublisherAdapter adapter = new SpringDomainEventPublisherAdapter(applicationEventPublisher);
 
         adapter.publish(event);
