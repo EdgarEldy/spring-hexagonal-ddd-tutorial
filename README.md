@@ -16,6 +16,8 @@ This document is the **complete specification** of the project: it is meant to b
 - [Module dependency rules](#module-dependency-rules)
 - [Module structure](#module-structure)
 - [Standard response format](#standard-response-format)
+- [Testing strategy](#testing-strategy)
+  - [Test naming convention](#test-naming-convention)
 - [Branching strategy](#branching-strategy)
 - [feature/domain](#featuredomain)
 - [feature/application](#featureapplication)
@@ -352,6 +354,32 @@ public record ApiResponse<T>(
   "timestamp": "2026-07-11T22:30:00Z"
 }
 ```
+
+## Testing strategy
+
+Every module ships its tests before its Pull Request is opened, with the tool that fits the module's place in the architecture.
+
+| Module | Tool | What it verifies |
+|---|---|---|
+| `domain` | JUnit 5 only, no Spring context | Aggregate invariants, Value Objects, domain events, command validation |
+| `application` | JUnit 5 + Mockito | Use case orchestration, with every outbound port mocked |
+| `infrastructure` | `@WebMvcTest` and `@DataJpaTest` | Controllers with the use cases mocked, persistence adapters against a real schema |
+| `bootstrap` | `@SpringBootTest` + Testcontainers (real PostgreSQL) | The application context wiring the four modules together |
+| `arch-test` | ArchUnit | The dependency rules between modules and the naming rules for ports and adapters |
+
+### Test naming convention
+
+Every test method, in every module, is named `_NN_Should<Outcome>_When<Condition>`: a two-digit, zero-padded sequence number (the order of the methods within the class, restarting at `_01_` in each class; JUnit does not enforce it, it is kept consistent by convention), followed by what is expected, followed by the condition that produces it.
+
+```java
+@Test
+void _01_ShouldRejectPlacement_WhenOrderHasNoLine() { ... }
+
+@Test
+void _02_ShouldRaiseOrderPlacedEvent_WhenOrderIsPlaced() { ... }
+```
+
+No other naming style (`shouldX()`, `testX()`, `givenX_whenY_thenZ()`, `rejects_a_blank_name()`) is used anywhere in this project's test suite. This applies to test methods only, not to `@BeforeEach`/`@AfterEach` helpers.
 
 ## Branching strategy
 

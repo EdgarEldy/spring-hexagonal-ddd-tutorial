@@ -22,7 +22,7 @@ class OrderLineTest {
     private static final Currency EUR = Currency.getInstance("EUR");
 
     @Test
-    void computes_subtotal_from_unit_price_and_quantity() {
+    void _01_ShouldComputeSubtotal_WhenUnitPriceAndQuantityAreGiven() {
         Money unitPrice = new Money(BigDecimal.valueOf(9.99), EUR);
 
         OrderLine line = OrderLine.of(1L, "Mechanical keyboard", 3, unitPrice);
@@ -31,7 +31,7 @@ class OrderLineTest {
     }
 
     @Test
-    void rejects_a_zero_or_negative_quantity() {
+    void _02_ShouldRejectLine_WhenQuantityIsZeroOrNegative() {
         Money unitPrice = new Money(BigDecimal.valueOf(9.99), EUR);
 
         assertThatThrownBy(() -> OrderLine.of(1L, "Mechanical keyboard", 0, unitPrice))
@@ -39,7 +39,7 @@ class OrderLineTest {
     }
 
     @Test
-    void rejects_a_blank_product_name() {
+    void _03_ShouldRejectLine_WhenProductNameIsBlank() {
         Money unitPrice = new Money(BigDecimal.valueOf(9.99), EUR);
 
         assertThatThrownBy(() -> OrderLine.of(1L, " ", 1, unitPrice))
