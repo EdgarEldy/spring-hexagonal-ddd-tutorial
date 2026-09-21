@@ -35,7 +35,7 @@ class GetOrderServiceTest {
     private OrderRepositoryPort orderRepositoryPort;
 
     @Test
-    void returns_the_order_when_found() {
+    void _01_ShouldReturnOrder_WhenOrderIsFound() {
         Money unitPrice = new Money(BigDecimal.valueOf(9.99), Currency.getInstance("EUR"));
         OrderLine line = OrderLine.of(1L, "Mechanical keyboard", 1, unitPrice);
         Order order = Order.reconstitute(99L, 7L, List.of(line), OrderStatus.PLACED, Instant.now());
@@ -48,7 +48,7 @@ class GetOrderServiceTest {
     }
 
     @Test
-    void returns_empty_when_not_found() {
+    void _02_ShouldReturnEmpty_WhenOrderIsNotFound() {
         when(orderRepositoryPort.findById(404L)).thenReturn(Optional.empty());
         GetOrderService service = new GetOrderService(orderRepositoryPort);
 
